@@ -10,7 +10,7 @@ class VirtualKeyboard:
 
         # Configuración de la API de OpenAI
         self.client = OpenAI(
-            api_key="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"
+            api_key="sk-"
         )
 
         # Campo de entrada
