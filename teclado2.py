@@ -80,32 +80,46 @@ class VirtualKeyboard:
             print(f"Error al obtener sugerencias iniciales: {e}")
 
     def update_suggestions(self, event=None):
-        # Obtener el texto actual del campo de entrada
-        current_text = self.entry.get()
+        print("ENTRO PARA ACTUALIZARRRRRRRR")
+        current_text = self.entry.get().strip()
 
-        # Determinar el contexto para la solicitud a la API
-        if current_text:  # Si hay texto en el campo de entrada
-            prompt = f"dame 3 sugerencias para completar esta palabra o frase delimitadas por comas: '{current_text}'"
-        else:  # Si no hay texto
-            prompt = "Dame 3 sugerencias de palabras aleatorias separadas por comas"
+        if not current_text:
+            prompt = (
+                "Vas a actuar como un generador de autocompletado. "
+                "Solo responde con 3 palabras aleatorias separadas por comas para comenzar una conversación."
+            )
+        else:
+            prompt = f"""
+    Vas a actuar como un generador de autocompletado de acuerdo a las letras que te mande.
+    Solo responde con una lista de 3 palabras sugeridas, separadas por comas. No escribas ninguna explicación.
+
+    Ejemplo:
+    - Entrada: ho
+    - Sugerencias: hola, hoy, hoigan
+
+    Entrada: {current_text}
+    """
 
         try:
-            # Llamada a la API de OpenAI usando el cliente
-            response = self.client.responses.create(
+            # ✅ Usa el endpoint correcto
+            response = self.client.chat.completions.create(
                 model="gpt-4o",
-                instructions="Eres un asistente útil.",
-                input=prompt
+                messages=[{"role": "user", "content": prompt}]
             )
-            # Extraer las palabras separadas por comas
-            suggestions = response.output_text.strip().split(",")
-            suggestions = [s.strip() for s in suggestions]  # Eliminar espacios adicionales
 
-            # Actualizar los botones con las nuevas sugerencias
-            for i, suggestion in enumerate(suggestions):
-                if i < len(self.info_buttons):
-                    self.info_buttons[i].config(text=suggestion)
+            # ✅ Extraer respuesta del primer mensaje
+            content = response.choices[0].message.content.strip()
+            suggestions = [s.strip() for s in content.split(",")]
+
+            # ✅ Actualizar los botones
+            for i in range(3):
+                text = suggestions[i] if i < len(suggestions) else ""
+                self.info_buttons[i].config(text=text)
+
         except Exception as e:
-            print(f"Error al obtener sugerencias: {e}")
+            print(f"❌ Error al obtener sugerencias: {e}")
+
+
 
     def insert_suggestion(self, idx):
         # Insertar la sugerencia seleccionada en el campo de entrada
