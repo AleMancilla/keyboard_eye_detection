@@ -3,7 +3,7 @@ import time
 import cv2
 from ultralytics import YOLO
 import pyttsx3
-from teclado2 import start_virtual_keyboard
+from HACKATHON.teclado import start_virtual_keyboard
 
 # Función para decir texto en voz alta
 def speak(text, engine):
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     engine = pyttsx3.init()
 
     # 🧠 Cargar modelo YOLO
-    modelo = YOLO("best5.pt")
+    modelo = YOLO("best.pt")
 
     # 🎥 Captura de video
     cap = cv2.VideoCapture(0)
