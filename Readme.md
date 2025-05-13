@@ -43,7 +43,4 @@ Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más 
 📑 Modelo y dataset: en el codigo archivo best.pt
 
 
-<video width="640" height="360" controls>
-  <source src="HACKATHON/demo.mp4" type="video/mp4">
-  Tu navegador no soporta la etiqueta de video.
-</video>
+![Texto alternativo descriptivo](demo.gif)
